@@ -1,19 +1,29 @@
-import SelectDestination from "@/components/userinput/SelectDestination";
-import { View } from "react-native";
-import { Button, Text } from "react-native-paper";
-import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+import * as React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { BottomNavigation, Text } from 'react-native-paper';
+import SelectDestination from '@/components/userinput/SelectDestination';
+import Map from '@/components/visual/Map';
+
+const SelectDestinationRoute = () => <SelectDestination />;
+const MapRoute = () => <Map />;
 
 export default function Index() {
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'selectDestination', title: 'Select Destination', unfocusedIcon: 'arrow-decision-outline', focusedIcon: 'arrow-decision' },
+    { key: 'map', title: 'Map', unfocusedIcon: 'map-legend', focusedIcon: 'map-search' },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    selectDestination: SelectDestinationRoute,
+    map: MapRoute,
+  });
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-        {/* <Text variant="displayLarge">Edit app/index.tsx to edit this screen.</Text> */}
-    <SelectDestination></SelectDestination>
-  </View>
+    <BottomNavigation
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
   );
 }
