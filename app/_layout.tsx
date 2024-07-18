@@ -1,5 +1,6 @@
+import { DarkTheme } from "@react-navigation/native";
 import { Stack } from "expo-router";
-import { PaperProvider } from "react-native-paper";
+import { DefaultTheme, PaperProvider } from "react-native-paper";
 
 const theme = {
   
@@ -7,7 +8,7 @@ const theme = {
 
 export default function RootLayout() {
   return (
-    <PaperProvider>
+    <PaperProvider theme={DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" />
       </Stack>
