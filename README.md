@@ -11,6 +11,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```
 
 2. Start the app
+   run dev build now:
+   ```bash
+      npm run dev
+   ```
+
    run on android device with local develop build
    ```bash
       npx expo run:android
@@ -19,6 +24,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
     npx expo start
    ```
+
+
+3. Build the app
+```bash
+   eas build -p android --local --profile preview
+```
 
 In the output, you'll find options to open the app in a
 
