@@ -1,24 +1,29 @@
 import * as React from 'react';
-import { SegmentedButtons, TextInput, ToggleButton, Text, Button } from 'react-native-paper';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 
-const SelectDestination = () => {
-  const [value, setValue] = React.useState('');
+NetInfo.fetch().then(state => {
+  console.log('Connection type', state.type);
+  console.log('Is connected?', state.isConnected);
+  console.log(state.details)
+});
 
+const Map = ({ floorNumber, roomNumber }) => {
   return (
-      <SafeAreaView>
-
-        <Text>Map Placeholder</Text>
-        <Button icon="arrow-decision" mode="contained" onPress={() => console.log('Pressed')}>
-    Press me
-  </Button>
-    </SafeAreaView>
-      
+    <View style={styles.container}>
+      <Text>Selected Floor: {floorNumber}</Text>
+      <Text>Room Number: {roomNumber}</Text>
+      {/* Map implementation */}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
-export default SelectDestination;
+export default Map;

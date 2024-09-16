@@ -1,71 +1,53 @@
 import * as React from 'react';
-import { SegmentedButtons, TextInput, ToggleButton } from 'react-native-paper';
+import { Button, SegmentedButtons, TextInput } from 'react-native-paper';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 
-const SelectDestination = () => {
-  const [value, setValue] = React.useState('');
+const SelectDestination = ({ onSearch }) => {
+  const [floorNumber, setFloorNumber] = React.useState('');
+  const [roomNumber, setRoomNumber] = React.useState('');
 
   return (
-      <SafeAreaView style={styles.container}>
-        {/* <ToggleButton.Row onValueChange={value => setValue(value)} value={value}>
-          <ToggleButton
-            icon="numeric-0-circle"
-            value="0"
-            style={value === '0' ? styles.selectedButton : styles.button}
-          />
-          <ToggleButton
-            icon="numeric-1-circle"
-            value="1"
-            style={value === '1' ? styles.selectedButton : styles.button}
-          />
-          <ToggleButton
-            icon="numeric-2-circle"
-            value="2"
-            style={value === '2' ? styles.selectedButton : styles.button}
-          />
-          <ToggleButton
-            icon="numeric-3-circle"
-            value="3"
-            style={value === '3' ? styles.selectedButton : styles.button}
-          />
-        </ToggleButton.Row> */}
-        <SegmentedButtons
-          value={value}
-          onValueChange={setValue}
-          buttons={[
-            { value: '0', label: 'Etage 0' },
-            { value: '1', label: 'Etage 1'},
-            { value: '2', label: 'Etage 2' },
-            { value: '3', label: 'Etage 3' },
-          ]}
-        />
-        <TextInput
-          placeholder={'Raum-Nummer'}
-          keyboardType="numeric"
-          mode='outlined'
-          style={styles.roomInput}
-        />
+    <SafeAreaView style={styles.container}>
+      <SegmentedButtons
+        value={floorNumber}
+        onValueChange={setFloorNumber}
+        buttons={[
+          { value: '0', label: 'Etage 0' },
+          { value: '1', label: 'Etage 1' },
+          { value: '2', label: 'Etage 2' },
+          { value: '3', label: 'Etage 3' },
+        ]}
+      />
+      <TextInput
+        placeholder={'Raum-Nummer'}
+        keyboardType="numeric"
+        mode='outlined'
+        style={styles.roomInput}
+        value={roomNumber}
+        onChangeText={setRoomNumber}
+      />
+      <Button
+        icon="airplane-search"
+        mode="contained"
+        onPress={() => onSearch(floorNumber, roomNumber)}
+      >
+        Weg Suche
+      </Button>
     </SafeAreaView>
-      
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: 'white',
-  },
-  selectedButton: {
-    backgroundColor: 'red',
-  },
   container: {
     flex: 1,
     alignItems: 'center',
     marginHorizontal: 10,
-    marginTop: 50
+    marginTop: 275,
   },
   roomInput: {
-    margin: 18
-  }
+    margin: 18,
+    paddingHorizontal: 5,
+  },
 });
 
 export default SelectDestination;
