@@ -1,4 +1,4 @@
-package com.blankjr.navigationclient
+package com.blankjr.navigationclient.dev
 
 import android.os.Build
 import android.os.Bundle
