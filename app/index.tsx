@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import SelectDestination from '@/components/userinput/SelectDestination';
 import Map from '@/components/visual/Map';
 
@@ -33,6 +35,24 @@ export default function Index() {
     );
   };
 
+  const handleExportData = async () => {
+    const data = {
+      entries: networkEntries,
+      exportDate: new Date().toISOString(),
+    };
+
+    const jsonString = JSON.stringify(data, null, 2);
+    const fileUri = `${FileSystem.documentDirectory}network_data_${Date.now()}.json`;
+
+    try {
+      await FileSystem.writeAsStringAsync(fileUri, jsonString);
+      await Sharing.shareAsync(fileUri, { mimeType: 'application/json', dialogTitle: 'Export Network Data' });
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      // You might want to show an error message to the user here
+    }
+  };
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'selectDestination':
@@ -43,6 +63,7 @@ export default function Index() {
           roomNumber={roomNumber} 
           networkEntries={networkEntries}
           onDeleteEntry={handleDeleteEntry}
+          onExportData={handleExportData}
         />;
       default:
         return null;
