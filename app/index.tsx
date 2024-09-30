@@ -27,6 +27,12 @@ export default function Index() {
     setIndex(1); // Switch to Map
   };
 
+  const handleDeleteEntry = (index) => {
+    setNetworkEntries(prevEntries => 
+      prevEntries.filter((_, i) => i !== index)
+    );
+  };
+
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'selectDestination':
@@ -36,6 +42,7 @@ export default function Index() {
           floorNumber={floorNumber} 
           roomNumber={roomNumber} 
           networkEntries={networkEntries}
+          onDeleteEntry={handleDeleteEntry}
         />;
       default:
         return null;

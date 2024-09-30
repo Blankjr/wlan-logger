@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { IconButton } from 'react-native-paper';
 
-const Map = ({ floorNumber, roomNumber, networkEntries }) => {
+const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry }) => {
   const netInfo = useNetInfo();
 
   return (
@@ -29,7 +30,14 @@ const Map = ({ floorNumber, roomNumber, networkEntries }) => {
       <Text style={styles.sectionTitle}>Network Entries:</Text>
       {networkEntries.map((entry, index) => (
         <View key={index} style={styles.entryContainer}>
-          <Text style={styles.entryTitle}>{entry.name}</Text>
+          <View style={styles.entryHeader}>
+            <Text style={styles.entryTitle}>{entry.name}</Text>
+            <IconButton
+              icon="close"
+              size={20}
+              onPress={() => onDeleteEntry(index)}
+            />
+          </View>
           {Object.entries(entry).map(([key, value]) => 
             key !== 'name' && (
               <Text key={key}>{key}: {value}</Text>
@@ -58,10 +66,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
   },
+  entryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
   entryTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 4,
   },
 });
 
