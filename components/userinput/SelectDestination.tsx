@@ -1,10 +1,27 @@
 import * as React from 'react';
 import { Button, SegmentedButtons, TextInput } from 'react-native-paper';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { useNetInfo } from "@react-native-community/netinfo";
 
 const SelectDestination = ({ onSearch }) => {
   const [floorNumber, setFloorNumber] = React.useState('');
   const [roomNumber, setRoomNumber] = React.useState('');
+  const netInfo = useNetInfo();
+
+  const handleSearch = () => {
+    const networkDetails = netInfo.type === 'wifi' && netInfo.details
+      ? {
+          strength: netInfo.details.strength,
+          ipAddress: netInfo.details.ipAddress,
+          linkSpeed: netInfo.details.linkSpeed,
+          bssid: netInfo.details.bssid,
+          ssid: netInfo.details.ssid,
+          subnet: netInfo.details.subnet,
+        }
+      : { message: 'No Wi-Fi details available.' };
+
+    onSearch(floorNumber, roomNumber, networkDetails);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,7 +46,7 @@ const SelectDestination = ({ onSearch }) => {
       <Button
         icon="airplane-search"
         mode="contained"
-        onPress={() => onSearch(floorNumber, roomNumber)}
+        onPress={handleSearch}
       >
         Weg Suche
       </Button>
