@@ -2,7 +2,7 @@ const IS_DEV = process.env.APP_VARIANT === "development";
 const IS_BETA = process.env.APP_VARIANT === "beta";
 const IS_PREVIEW = process.env.APP_VARIANT === "preview";
 
-const APP_NAME = "Freibewegen";
+const APP_NAME = "wlan-logger";
 
 export default {
   expo: {
@@ -18,7 +18,7 @@ export default {
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     splash: {
-      image: "./assets/images/splash.png",
+      image: "./assets/images/android/play_store_512.png",
       resizeMode: "contain",
       backgroundColor: "#ffffff",
     },
@@ -27,20 +27,20 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
+        foregroundImage: "./assets/images/android/play_store_512.png",
         backgroundColor: "#ffffff",
       },
       // package: "com.blankjr.navigationclient",
       package:
       IS_DEV
-        ? "com.blankjr.navigationclient.dev"
-        : "com.blankjr.navigationclient",
+        ? "com.blankjr.wlanlogger.dev"
+        : "com.blankjr.wlanlogger",
       // useNextNotificationsApi: IS_DEV,  // Add this line to differentiate behavior
     },
     web: {
       bundler: "metro",
       output: "static",
-      favicon: "./assets/images/favicon.png",
+      favicon: "./assets/images/web/favicon.ico",
     },
     plugins: [
       "expo-router"
@@ -53,7 +53,7 @@ export default {
         origin: false,
       },
       eas: {
-        projectId: "53469d35-baad-4722-9cc9-6c1f986bd03e",
+        projectId: "25fd7a75-8bc0-4ca9-938d-f6ca701a8556",
       },
     },
   },

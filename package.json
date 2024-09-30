@@ -1,5 +1,5 @@
 {
-  "name": "navigation-client",
+  "name": "wlan-logger",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
