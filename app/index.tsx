@@ -22,7 +22,7 @@ export default function Index() {
     setNetworkEntries(prevEntries => [
       ...prevEntries,
       {
-        name: `Room ${roomNumber}`,
+        name: `4.${floorNumber}.${roomNumber}`,
         ...netInfo
       }
     ]);
