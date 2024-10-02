@@ -10,9 +10,9 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "dev": "APP_VARIANT=development npx expo start",
-    "dev2": "APP_VARIANT=development npx expo run:android",
-    "build-preview": "APP_VARIANT=preview eas build -p android --local --profile preview"
+    "dev-old": "APP_VARIANT=development npx expo start",
+    "dev": "APP_VARIANT=development npx expo run:android",
+    "build-preview": "rm -rf android && APP_VARIANT=preview eas build -p android --local --profile preview"
   },
   "jest": {
     "preset": "jest-expo"
