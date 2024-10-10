@@ -1,36 +1,61 @@
 import * as React from 'react';
 import { Button, SegmentedButtons, TextInput } from 'react-native-paper';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
-import { useNetInfoInstance } from "@react-native-community/netinfo";
+import { View, StyleSheet, SafeAreaView, Platform, PermissionsAndroid } from 'react-native';
+import WifiManager from "react-native-wifi-reborn";
 
 const SelectDestination = ({ onSearch }) => {
   const [floorNumber, setFloorNumber] = React.useState('');
   const [roomNumber, setRoomNumber] = React.useState('');
-  const { netInfo, refresh } = useNetInfoInstance();
+
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: "Location permission is required for WiFi connections",
+            message:
+              "This app needs location permission as this is required " +
+              "to scan for wifi networks.",
+            buttonNegative: "DENY",
+            buttonPositive: "ALLOW"
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log("You can use the WiFi");
+        } else {
+          console.log("Location permission denied");
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+  };
 
   const handleSearch = async () => {
     try {
-      // Refresh the network state
-      await refresh();
+      await requestLocationPermission();
 
-      const networkDetails = netInfo.type === 'wifi' && netInfo.details
-        ? {
-            strength: netInfo.details.strength,
-            ipAddress: netInfo.details.ipAddress,
-            linkSpeed: netInfo.details.linkSpeed,
-            bssid: netInfo.details.bssid,
-            ssid: netInfo.details.ssid,
-            subnet: netInfo.details.subnet,
-          }
-        : { message: 'No Wi-Fi details available.' };
+      const ssid = await WifiManager.getCurrentWifiSSID();
+      const bssid = await WifiManager.getBSSID();
+      const strength = await WifiManager.getCurrentSignalStrength();
+      const frequency = await WifiManager.getFrequency();
+      const ip = await WifiManager.getIP();
 
-      onSearch(floorNumber, roomNumber, networkDetails); 
+      const wifiInfo = {
+        ssid,
+        bssid,
+        strength,
+        frequency,
+        ip
+      };
+
+      onSearch(floorNumber, roomNumber, wifiInfo);
     } catch (error) {
-    console.error('Error fetching network info:', error);
-    // You might want to show an error message to the user here
+      console.error('Error fetching WiFi info:', error);
+      // You might want to show an error message to the user here
     }
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
