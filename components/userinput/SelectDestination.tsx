@@ -92,7 +92,7 @@ const SelectDestination = ({ onSearch }) => {
       }));
 
       const scanData = {
-        'version:id': '1.0',
+        'version_id': '1.0',
         id: generateUUID(),
         timestamp: Date.now(),
         token: 'scanner_1',
