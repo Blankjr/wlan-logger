@@ -1,8 +1,62 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, ToastAndroid } from 'react-native';
 import { IconButton, Button, Card, Divider } from 'react-native-paper';
 
 const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry, onExportData }) => {
+  const [uploading, setUploading] = React.useState(false);
+
+  // server's IP address
+  const SERVER_URL = 'http://192.168.1.105:8006';
+
+  const sendToServer = async () => {
+    setUploading(true);
+    try {
+      console.log('Attempting to send data to:', `${SERVER_URL}/sampling/`);
+      for (const entry of networkEntries) {
+        console.log('Sending entry:', JSON.stringify(entry, null, 2));
+        
+        const response = await fetch(`${SERVER_URL}/sampling/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            version_id: entry.version_id,
+            id: entry.id,
+            timestamp: entry.timestamp,
+            token: entry.token,
+            location: {
+              position_metric: entry.location.position_px,
+              position_px: entry.location.position_px,
+              position_geo: {
+                latitude: 0,
+                longitude: 0
+              },
+              floor: entry.location.floor,
+              building: entry.location.building
+            },
+            samples: entry.samples
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Server response:', errorText);
+          throw new Error(`Server error: ${errorText}`);
+        }
+
+        const responseData = await response.json();
+        console.log('Server response:', responseData);
+      }
+      
+      ToastAndroid.show('Data successfully sent to server', ToastAndroid.SHORT);
+    } catch (error) {
+      console.error('Error sending data to server:', error);
+      ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.LONG);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   console.log('Network Entries:', JSON.stringify(networkEntries, null, 2));
 
@@ -101,14 +155,27 @@ const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry, onExportD
       </ScrollView>
       
       <View style={styles.buttonContainer}>
-        <Button 
-          mode="contained" 
-          onPress={onExportData}
-          style={styles.exportButton}
-          icon="file-export-outline"
-        >
-          Export {networkEntries.length} Scans
-        </Button>
+      <View style={styles.buttonRow}>
+          <Button 
+            mode="contained" 
+            onPress={onExportData}
+            style={[styles.button, styles.exportButton]}
+            icon="file-export-outline"
+          >
+            Export {networkEntries.length} Scans
+          </Button>
+          
+          <Button 
+            mode="contained" 
+            onPress={sendToServer}
+            style={[styles.button, styles.uploadButton]}
+            icon="cloud-upload-outline"
+            loading={uploading}
+            disabled={uploading || networkEntries.length === 0}
+          >
+            {uploading ? 'Sending...' : 'Send to Server'}
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -210,8 +277,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 4,
   },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  button: {
+    flex: 1,
+  },
   exportButton: {
-    marginTop: 8,
+    backgroundColor: '#2196F3',
+  },
+  uploadButton: {
+    backgroundColor: '#4CAF50',
   },
 });
 

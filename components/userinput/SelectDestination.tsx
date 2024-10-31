@@ -91,13 +91,26 @@ const SelectDestination = ({ onSearch }) => {
         bssid: network.bssid,
       }));
 
+      const generateMongoObjectId = () => {
+        const timestamp = Math.floor(Date.now() / 1000).toString(16);
+        const machineId = Math.floor(Math.random() * 16777216).toString(16).padStart(6, '0');
+        const processId = Math.floor(Math.random() * 65536).toString(16).padStart(4, '0');
+        const counter = Math.floor(Math.random() * 16777216).toString(16).padStart(6, '0');
+        return timestamp + machineId + processId + counter;
+      };
+
       const scanData = {
-        'version_id': '1.0',
-        id: generateUUID(),
+        version_id: '1.0',
+        id: generateMongoObjectId(),
         timestamp: Date.now(),
         token: 'scanner_1',
         location: {
+          position_metric: selectedPosition, // Same as position_px for now
           position_px: selectedPosition,
+          position_geo: {
+            latitude: 0,
+            longitude: 0
+          },
           floor: `Etage ${floorNumber}`,
           building: '4'
         },
