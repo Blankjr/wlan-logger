@@ -1,65 +1,148 @@
-# Welcome to your Expo app 👋
+# WiFi Scanner App
+A React Native mobile application for mapping and analyzing WiFi networks across different floors of a building. This app helps collect, visualize, and analyze WiFi signal data for indoor positioning and network coverage assessment.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> **Important**: This app must be tested on a real Android device due to the WiFi scanning functionality, which cannot be properly simulated in emulators.
 
-## Get started
+## Features
+
+### 🗺️ Floor-based Mapping
+- Interactive floor plan selection (Floors 0-3)
+- Tap-to-mark position on floor plans
+- Visual position indicator
+
+### 📡 Network Scanning
+- Comprehensive WiFi network scanning
+- Captures SSID, BSSID, signal strength, channel, and security details
+- Support for both 2.4GHz and 5GHz bands
+- Real-time scanning with position tracking
+
+### 📊 Data Management
+- Stores scan results with location metadata
+- Export functionality to JSON format
+- Server upload capabilities for data synchronization
+- Delete individual scan entries
+
+### 📱 User Interface
+- Bottom navigation for easy access to main features
+- Material Design components using React Native Paper
+- Floor plan visualization
+- Signal strength indicators with color coding
+
+## Technical Details
+
+### Dependencies
+- React Native
+- Expo
+- React Native Paper for UI components
+- @react-native-tethering/wifi for WiFi scanning
+- expo-file-system for file operations
+- expo-sharing for export functionality
+
+### Data Structure
+Each scan entry includes:
+- Version ID
+- Unique MongoDB-style ObjectID
+- Timestamp
+- Location data (coordinates, floor, building)
+- Network samples with detailed WiFi information
+
+## Get Started
 
 1. Install dependencies
-
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 2. Start the app
-   run dev build now:
-   ```bash
-      npm run dev
-   ```
-
-   run on android device with local develop build
-   ```bash
-      npx expo run:android
-   ```
-   old:
-   ```bash
-    npx expo start
-   ```
-
+* Run dev build now:
+```bash
+npm run dev
+```
+* Run on Android device with local develop build:
+```bash
+npx expo run:android
+```
+* Classic Expo start:
+```bash
+npx expo start
+```
 
 3. Build the app
 ```bash
-   eas build -p android --local --profile preview
+eas build -p android --local --profile preview
 ```
 
-In the output, you'll find options to open the app in a
+## Testing Requirements
+### Device Requirements
+- Must be tested on a physical Android device
+- Emulators do not support the WiFi scanning functionality properly
+- Test device should have WiFi capabilities and location services enabled
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Testing Setup
+1. Enable Developer Options on your Android device
+2. Enable USB debugging
+3. Connect device via USB
+4. Ensure device is recognized using `adb devices`
+5. Run the app using `npx expo run:android`
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Required Permissions
+The app requires the following Android permissions:
+- ACCESS_FINE_LOCATION
+- ACCESS_COARSE_LOCATION
 
-## Get a fresh project
+These permissions are necessary for WiFi scanning functionality and are automatically requested when using the location selection feature (`SelectDestination.tsx`).
+## Troubleshooting
 
-When you're ready, run:
+### Build Configuration Issues
 
-```bash
-npm run reset-project
+#### Android Package Warning
+If you see this warning:
+```
+Warning: Specified value for "android.package" in app.config.js is ignored because 
+an android directory was detected in the project.
+EAS Build will use the value found in the native code.
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+**Solution:**
+1. Delete the `android` folder
+2. Let Expo create a new one automatically
 
-## Learn more
+**Note:** This issue occurs when switching between dev and preview builds. It's only relevant when deploying new features to external users and doesn't affect regular development.
 
-To learn more about developing your project with Expo, look at the following resources:
+### Common Issues
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. **WiFi Scanning Not Working**
+   - Ensure location permissions are granted
+   - Check if WiFi is enabled
+   - Verify Android location services are active
 
-## Join the community
+2. **Build Failures**
+   - Clean the project: `npm clean`
+   - Remove node_modules: `rm -rf node_modules`
+   - Reinstall dependencies: `npm install`
 
-Join our community of developers creating universal apps.
+3. **Map Display Issues**
+   - Verify floor plan images are in correct directory
+   - Check image format compatibility
+   - Ensure proper asset linking
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Project Structure
+```
+src/
+  ├── components/
+  │   ├── userinput/
+  │   │   ├── SelectDestination.tsx   # Floor and position selection component
+  │   │   └── MapSelector.tsx         # Interactive floor plan component
+  │   │
+  │   └── visual/
+  │       └── Map.tsx                 # Network scan visualization
+  ├── assets/
+  │   └── maps/                       # Floor plan images
+  └── app/
+      └── index.tsx                   # Main app entry point
+```
+
+### Building for Production
+1. Configure your EAS Build profile in `eas.json`
+2. Run the build command for your target platform
+3. Follow the Expo build process
