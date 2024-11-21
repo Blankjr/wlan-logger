@@ -15,7 +15,7 @@ const MapSelector = ({ floor, onPositionSelect }) => {
         case '3':
           return require('../../assets/maps/floor3.png');
         case '2':
-          return require('../../assets/maps/floor2.jpg');
+          return require('../../assets/maps/floor2.png');
         case '1':
             return require('../../assets/maps/floor1.png');
         default:
