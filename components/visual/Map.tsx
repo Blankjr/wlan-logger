@@ -1,21 +1,40 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, ToastAndroid } from 'react-native';
 import { IconButton, Button, Card, Divider } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ServerConfigDialog from '../settings/ServerConfigDialog';
+
+const SERVER_URL_KEY = 'server_url';
+const DEFAULT_SERVER_URL = 'http://192.168.1.105:8006';
 
 const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry, onExportData }) => {
   const [uploading, setUploading] = React.useState(false);
+  const [serverUrl, setServerUrl] = React.useState(DEFAULT_SERVER_URL);
+  const [configVisible, setConfigVisible] = React.useState(false);
 
-  // server's IP address
-  const SERVER_URL = 'http://192.168.1.105:8006';
+  React.useEffect(() => {
+    loadServerUrl();
+  }, []);
+
+  const loadServerUrl = async () => {
+    try {
+      const savedUrl = await AsyncStorage.getItem(SERVER_URL_KEY);
+      if (savedUrl) {
+        setServerUrl(savedUrl);
+      }
+    } catch (error) {
+      console.error('Error loading server URL:', error);
+    }
+  };
 
   const sendToServer = async () => {
     setUploading(true);
     try {
-      console.log('Attempting to send data to:', `${SERVER_URL}/sampling/`);
+      console.log('Attempting to send data to:', `${serverUrl}/sampling/`);
       for (const entry of networkEntries) {
         console.log('Sending entry:', JSON.stringify(entry, null, 2));
         
-        const response = await fetch(`${SERVER_URL}/sampling/`, {
+        const response = await fetch(`${serverUrl}/sampling/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -57,8 +76,6 @@ const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry, onExportD
       setUploading(false);
     }
   };
-
-  console.log('Network Entries:', JSON.stringify(networkEntries, null, 2));
 
   const formatTimestamp = (timestamp) => {
     return new Date(timestamp).toLocaleString();
@@ -155,14 +172,23 @@ const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry, onExportD
       </ScrollView>
       
       <View style={styles.buttonContainer}>
-      <View style={styles.buttonRow}>
+        <View style={styles.buttonRow}>
           <Button 
             mode="contained" 
             onPress={onExportData}
             style={[styles.button, styles.exportButton]}
             icon="file-export-outline"
           >
-            Export {networkEntries.length} Scans
+            Export
+          </Button>
+          
+          <Button 
+            mode="contained" 
+            onPress={() => setConfigVisible(true)}
+            style={[styles.button, styles.configButton]}
+            icon="cog-outline"
+          >
+            Config
           </Button>
           
           <Button 
@@ -173,10 +199,19 @@ const Map = ({ floorNumber, roomNumber, networkEntries, onDeleteEntry, onExportD
             loading={uploading}
             disabled={uploading || networkEntries.length === 0}
           >
-            {uploading ? 'Sending...' : 'Send to Server'}
+            {uploading ? 'Sending...' : 'Send'}
           </Button>
         </View>
       </View>
+
+      <ServerConfigDialog
+        visible={configVisible}
+        onDismiss={() => setConfigVisible(false)}
+        onSave={(url) => {
+          setServerUrl(url);
+          ToastAndroid.show('Server URL updated', ToastAndroid.SHORT);
+        }}
+      />
     </SafeAreaView>
   );
 };
