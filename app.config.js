@@ -1,5 +1,4 @@
 const IS_DEV = process.env.APP_VARIANT === "development";
-const IS_BETA = process.env.APP_VARIANT === "beta";
 const IS_PREVIEW = process.env.APP_VARIANT === "preview";
 
 const APP_NAME = "wlan-logger";
@@ -30,12 +29,11 @@ export default {
         foregroundImage: "./assets/images/android/play_store_512.png",
         backgroundColor: "#ffffff",
       },
-      // package: "com.blankjr.navigationclient",
-      package:
-      IS_DEV
-        ? "com.blankjr.wlanlogger.dev"
+      package: IS_DEV 
+      ? "com.blankjr.wlanlogger.dev"
+      : IS_PREVIEW
+        ? "com.blankjr.wlanlogger.preview"
         : "com.blankjr.wlanlogger",
-      // useNextNotificationsApi: IS_DEV,  // Add this line to differentiate behavior
     },
     web: {
       bundler: "metro",
