@@ -17,7 +17,7 @@ export default {
     scheme: "myapp",
     userInterfaceStyle: "automatic",
     splash: {
-      image: "./assets/images/android/play_store_512.png",
+      image: "./assets/icon.png",
       resizeMode: "contain",
       backgroundColor: "#ffffff",
     },
@@ -26,7 +26,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/android/play_store_512.png",
+        foregroundImage: "./assets/icon.png",
         backgroundColor: "#ffffff",
       },
       package: IS_DEV 

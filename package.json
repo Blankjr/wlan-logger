@@ -11,7 +11,7 @@
     "lint": "expo lint",
     "dev": "APP_VARIANT=development npx expo run:android",
     "build-preview": "rm -rf android && APP_VARIANT=preview eas build -p android --local --profile preview",
-    "build-production": "APP_VARIANT=production eas build -p android --local --profile production"
+    "build-production": "rm -rf android && APP_VARIANT=production eas build -p android --local --profile production"
   },
   "jest": {
     "preset": "jest-expo"
