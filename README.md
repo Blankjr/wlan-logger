@@ -58,18 +58,10 @@ npm install
 ```bash
 npm run dev
 ```
-* Run on Android device with local develop build:
-```bash
-npx expo run:android
-```
-* Classic Expo start:
-```bash
-npx expo start
-```
 
-3. Build the app
+3. Build the app (apk)
 ```bash
-eas build -p android --local --profile preview
+npm run build-production
 ```
 
 ## Testing Requirements
@@ -83,7 +75,7 @@ eas build -p android --local --profile preview
 2. Enable USB debugging
 3. Connect device via USB
 4. Ensure device is recognized using `adb devices`
-5. Run the app using `npx expo run:android`
+5. Run the app using `npm run dev`
 
 ## Required Permissions
 The app requires the following Android permissions:
