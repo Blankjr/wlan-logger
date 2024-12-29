@@ -15,7 +15,10 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={customTheme}>
       <Stack>
-        <Stack.Screen name="index" />
+        <Stack.Screen name="index" 
+        options={{
+          headerTitle: 'Wlan Logger',
+        }}/>
       </Stack>
     </PaperProvider>
   );

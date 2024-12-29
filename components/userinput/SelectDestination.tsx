@@ -175,10 +175,10 @@ const SelectDestination = ({ onSearch }) => {
         value={floorNumber}
         onValueChange={setFloorNumber}
         buttons={[
-          { value: '0', label: 'Etage 0' },
-          { value: '1', label: 'Etage 1' },
-          { value: '2', label: 'Etage 2' },
-          { value: '3', label: 'Etage 3' },
+          { value: '0', label: 'Floor 0' },
+          { value: '1', label: 'Floor 1' },
+          { value: '2', label: 'Floor 2' },
+          { value: '3', label: 'Floor 3' },
         ]}
       />
       

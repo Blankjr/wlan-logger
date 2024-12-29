@@ -13,15 +13,15 @@ export default function Index() {
   const routes = [
     { 
       key: 'selectDestination', 
-      title: 'Ziel wählen', 
+      title: 'Select Position', 
       unfocusedIcon: 'arrow-decision-outline', 
       focusedIcon: 'arrow-decision' 
     },
     { 
       key: 'map', 
-      title: 'Karte', 
-      unfocusedIcon: 'map-legend', 
-      focusedIcon: 'map-search' 
+      title: 'Scan Results', 
+      unfocusedIcon: 'signal-cellular-outline', 
+      focusedIcon: 'signal-cellular-3' 
     },
   ];
 

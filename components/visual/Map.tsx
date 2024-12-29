@@ -234,6 +234,8 @@ const styles = StyleSheet.create({
   entryContainer: {
     marginBottom: 16,
     elevation: 2,
+    borderWidth: 2,
+    borderColor: '#000000'
   },
   entryHeader: {
     flexDirection: 'row',
