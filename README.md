@@ -48,21 +48,29 @@ Each scan entry includes:
 
 ## Get Started
 
-1. Install dependencies
+### Install dependencies
 ```bash
 npm install
 ```
 
-2. Start the app
-* Run dev build now:
+### Clean Android folder if existing
+> **Important**: Clean build folders before switching between build variants
+```bash
+
+rm -rf android/  # On Unix-based systems
+# or
+rd /s /q android # On Windows
+```
+### Run dev build now:
 ```bash
 npm run dev
 ```
-
-3. Build the app (apk)
+### Build APK:
 ```bash
 npm run build-production
 ```
+
+> **Important**: It's recommended to delete the local android folder before switching between different build variants (dev/preview/production). This prevents package name issues caused by Expo caching the previous build configuration. For example, without cleaning, you might end up with a production build using the preview package name (com.blankjr.navigationclient.preview).
 
 ## Testing Requirements
 ### Device Requirements
